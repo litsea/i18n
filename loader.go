@@ -63,20 +63,28 @@ func (i *I18n) loadMessageFiles() {
 }
 
 func (i *I18n) loadMessageFile(lng language.Tag) {
+	var (
+		success  bool
+		firstErr error
+	)
+
 	for _, l := range i.loaders {
 		err := l.LoadMessage(i.bundle, lng)
-		if err != nil && i.logger != nil {
-			if lng != i.defaultLanguage {
-				i.logger.Warn(fmt.Errorf("load message file: %w, %w",
-					ErrBundleLoadMessageFileFailed, err).Error(),
-					"lng", lng,
-				)
-			} else {
-				i.logger.Error(fmt.Errorf("load default message: %w, %w",
-					ErrBundleLoadMessageFileFailed, err).Error(),
-					"lng", lng,
-				)
-			}
+		if err == nil {
+			success = true
+		} else if firstErr == nil {
+			firstErr = err
+		}
+	}
+
+	if !success && firstErr != nil && i.logger != nil {
+		if lng != i.defaultLanguage {
+			i.logger.Warn("load i18n message file", "lng", lng,
+				"err", fmt.Errorf("%w, %w", ErrBundleLoadMessageFileFailed, firstErr))
+		} else {
+			i.logger.Error("load i18n default message file", "lng", lng,
+				"err", fmt.Errorf("%w, %w", ErrBundleLoadMessageFileFailed, firstErr),
+			)
 		}
 	}
 }
