@@ -369,10 +369,8 @@ func runTranslationTest(t *testing.T, tt testTranslation, name string, opts ...O
 
 		if tt.errFunc == nil {
 			assert.NoError(t, err)
-		} else {
-			if !tt.errFunc(err) {
-				t.Errorf("TranslateWithConfig(),  msgID = %v, unexpected error: %v", tt.args.msgID, err)
-			}
+		} else if !tt.errFunc(err) {
+			t.Errorf("TranslateWithConfig(),  msgID = %v, unexpected error: %v", tt.args.msgID, err)
 		}
 	})
 }
