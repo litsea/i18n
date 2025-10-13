@@ -6,7 +6,7 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.6.0
 	github.com/stretchr/testify v1.11.1
 	go.yaml.in/yaml/v3 v3.0.4
-	golang.org/x/text v0.29.0
+	golang.org/x/text v0.30.0
 )
 
 require (
